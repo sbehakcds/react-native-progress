@@ -45,6 +45,7 @@ export default class ProgressBar extends Component {
     useNativeDriver: false,
     animationConfig: { bounciness: 0 },
     animationType: 'spring',
+    straight: false,
   };
 
   constructor(props) {
@@ -141,28 +142,16 @@ export default class ProgressBar extends Component {
       borderColor: borderColor || color,
       borderRadius,
       overflow: 'hidden',
+      borderBottomLeftRadius: this.props.straight ? 0 : 4,
+      borderTopLeftRadius: this.props.straight ? 0 : 4,
       backgroundColor: unfilledColor,
     };
     const progressStyle = {
+      borderBottomRightRadius: innerWidth/2,
+      borderTopRightRadius: innerWidth/2,
       backgroundColor: color,
       height,
-      transform: [{
-        translateX: this.state.animationValue.interpolate({
-          inputRange: [0, 1],
-          outputRange: [innerWidth * -INDETERMINATE_WIDTH_FACTOR, innerWidth],
-        }),
-      }, {
-        translateX: this.state.progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [innerWidth / -2, 0],
-        }),
-      }, {
-        // Interpolation a temp workaround for https://github.com/facebook/react-native/issues/6278
-        scaleX: this.state.progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0.0001, 1],
-        }),
-      }],
+      width: this.props.progress>0 ? innerWidth * this.props.progress : 0,
     };
 
     return (
